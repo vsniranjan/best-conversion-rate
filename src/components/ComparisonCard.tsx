@@ -25,7 +25,7 @@ const ComparisonCard = ({ variant = "best" }: { variant: Variant }) => {
   return (
     <>
       <Card
-        className={`flex w-full min-w-0 flex-col ${bgColor[variant]} ${ringColor[variant]}`}
+        className={`w-full sm:flex-1 min-w-0 ${bgColor[variant]} ${ringColor[variant]}`}
       >
         <CardHeader>
           <CardTitle className='text-center text-primary'>Skydo</CardTitle>
