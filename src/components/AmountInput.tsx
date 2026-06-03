@@ -12,7 +12,7 @@ export function AmountInput() {
         Enter the amount you're receiving
       </FieldLabel>
 
-      <div className='flex items-center gap-4'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4'>
         <InputGroup className='max-w-96 h-14 border-blue-800 bg-white has-[[data-slot=input-group-control]:focus-visible]:border-blue-600 has-[[data-slot=input-group-control]:focus-visible]:ring-blue-600/30'>
           <InputGroupInput
             id='amount-usd'
