@@ -19,7 +19,7 @@ export default function RootLayout({
       lang='en'
       className={cn(inter.className, "font-sans", geist.variable)}
     >
-      <body className='max-w-5xl mx-auto px-4 mt-10 bg-[#F7F9FF]'>
+      <body className='max-w-5xl mx-auto px-4 mt-10 pb-5 bg-[#F7F9FF]'>
         {children}
       </body>
     </html>
