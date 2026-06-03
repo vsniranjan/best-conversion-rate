@@ -1,5 +1,6 @@
 import { Inter, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -14,7 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      className={cn(inter.className, "font-sans", geist.variable)}
+    >
       <body className='max-w-7xl mx-auto px-4 mt-10 bg-[#F7F9FF]'>
         {children}
       </body>
