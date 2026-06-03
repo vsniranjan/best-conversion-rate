@@ -1,4 +1,5 @@
 import { AmountInput } from "@/components/AmountInput";
+import ComparisonField from "@/components/ComparisonField";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       </p>
 
       <AmountInput />
+      <ComparisonField />
     </>
   );
 }

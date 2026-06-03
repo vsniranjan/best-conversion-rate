@@ -3,4 +3,6 @@
 @theme {
   --color-primary: #111964;
   --color-muted: #6b7280;
+  --color-brand-red: #ff5959;
+  --color-brand-green: #33e580;
 }
