@@ -1,3 +1,5 @@
+import { AmountInput } from "@/components/AmountInput";
+
 export default function Home() {
   return (
     <>
@@ -10,6 +12,8 @@ export default function Home() {
         Compare forex charges across Skydo, Mulya, Infinity App, IDFC First
         Bank, and IOB.
       </p>
+
+      <AmountInput />
     </>
   );
 }
