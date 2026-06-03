@@ -1,4 +1,12 @@
+import { Inter, Geist } from "next/font/google";
 import "./globals.css";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -7,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body className='max-w-7xl mx-auto px-4 mt-10 bg-[#F7F9FF]'>
+        {children}
+      </body>
     </html>
   );
 }
