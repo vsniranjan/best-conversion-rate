@@ -12,8 +12,7 @@ export async function getMarketRate() {
 
   if (!res.ok) throw new Error(`Failed to fetch rates : ${res.status}`);
 
-  const data: ApiResponse = await res.json();
+  const data: ApiResponse[] = await res.json();
 
-  const rate = data.rate;
-  return rate;
+  return data[0];
 }
