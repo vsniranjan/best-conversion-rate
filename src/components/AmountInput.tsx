@@ -1,11 +1,26 @@
+"use client";
+import { useState, useTransition } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useRouter } from "next/navigation";
 
 export function AmountInput() {
+  const router = useRouter();
+  const [amount, setAmount] = useState("1000");
+  const [isPending, startTransition] = useTransition();
+
+  const handleCompare = () => {
+    if (amount && Number(amount) > 0) {
+      startTransition(() => {
+        router.push(`/?amt=${amount}`);
+      });
+    }
+  };
+
   return (
     <Field className='mt-16'>
       <FieldLabel htmlFor='amount-usd' className='text-sm text-gray-500'>
@@ -18,7 +33,10 @@ export function AmountInput() {
             id='amount-usd'
             type='number'
             min={0}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             className='text-primary font-medium text-2xl!'
+            placeholder='0'
           />
 
           <InputGroupAddon className='gap-3 text-primary ml-2'>
@@ -27,9 +45,13 @@ export function AmountInput() {
           </InputGroupAddon>
         </InputGroup>
 
-        <span className='text-xs text-gray-500'>
-          Mid-market rate: ₹83.42 / USD
-        </span>
+        <button
+          onClick={handleCompare}
+          disabled={!amount || Number(amount) <= 0 || isPending}
+          className='px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors'
+        >
+          {isPending ? "Calculating…" : "Compare Rates"}
+        </button>
       </div>
     </Field>
   );

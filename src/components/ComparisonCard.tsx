@@ -2,8 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 type Variant = "best" | "default" | "worst";
+type cardProps = {
+  name: string;
+  receivingAmtINR: number;
+  totalFee: number;
+  effectiveRate: number;
+  type: Variant;
+};
 
-const ComparisonCard = ({ variant = "best" }: { variant: Variant }) => {
+const ComparisonCard = ({ data }: { data: cardProps }) => {
   const bgColor = {
     best: "bg-brand-green/30",
     default: "bg-white",
@@ -25,10 +32,12 @@ const ComparisonCard = ({ variant = "best" }: { variant: Variant }) => {
   return (
     <>
       <Card
-        className={`w-full sm:flex-1 min-w-0 ${bgColor[variant]} ${ringColor[variant]}`}
+        className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
       >
         <CardHeader>
-          <CardTitle className='text-center text-primary'>Skydo</CardTitle>
+          <CardTitle className='text-center text-primary'>
+            {data.name}
+          </CardTitle>
         </CardHeader>
 
         <Separator className='bg-black mx-6 w-auto!' />
@@ -38,14 +47,14 @@ const ComparisonCard = ({ variant = "best" }: { variant: Variant }) => {
             <p className='text-primary text-[8px] tracking-widest'>
               YOU RECEIVE
             </p>
-            <p className={`text-2xl font-semibold ${amtColor[variant]}`}>
-              ₹79,249
+            <p className={`text-2xl font-semibold ${amtColor[data.type]}`}>
+              {`₹ ${data.receivingAmtINR}`}
             </p>
           </section>
 
           <section>
             <p className='text-primary text-[8px] tracking-widest'>CHARGES</p>
-            <p className='text-brand-red text-sm tracking-widest '>₹4,171</p>
+            <p className='text-brand-red text-sm tracking-widest '>{`₹${data.totalFee}`}</p>
           </section>
 
           <section>
@@ -53,7 +62,7 @@ const ComparisonCard = ({ variant = "best" }: { variant: Variant }) => {
               EFFECTIVE RATE
             </p>
             <p className='text-muted text-[10px] tracking-widest '>
-              ₹79.25 / USD
+              {`₹${data.effectiveRate} / USD`}
             </p>
           </section>
         </CardContent>

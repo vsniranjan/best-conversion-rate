@@ -1,8 +1,15 @@
+import { Suspense } from "react";
 import { AmountInput } from "@/components/AmountInput";
 import ComparisonField from "@/components/ComparisonField";
 import WorkingField from "@/components/WorkingField";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ amt: string }>;
+}) {
+  const { amt } = await searchParams;
+  const amtUSD = parseFloat(amt ?? "1000");
   return (
     <>
       <h1 className='text-6xl font-bold text-primary leading-15'>
@@ -16,7 +23,16 @@ export default function Home() {
       </p>
 
       <AmountInput />
-      <ComparisonField />
+      <Suspense
+        key={amtUSD}
+        fallback={
+          <p className='text-muted text-sm mt-14 mb-8 pl-2 animate-pulse'>
+            Fetching latest rates…
+          </p>
+        }
+      >
+        <ComparisonField amtUSD={amtUSD} />
+      </Suspense>
       <WorkingField />
     </>
   );
