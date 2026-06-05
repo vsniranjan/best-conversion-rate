@@ -4,7 +4,7 @@ type CalculationResult = {
   effectiveRate: number;
 };
 
-const calcBankCharges = (amtINRUsingTTRate: number): number => {
+export const calcBankCharges = (amtINRUsingTTRate: number): number => {
   const taxableValue = (() => {
     if (amtINRUsingTTRate < 100000) {
       return 0.01 * amtINRUsingTTRate > 250 ? 0.01 * amtINRUsingTTRate : 250;
@@ -19,7 +19,7 @@ const calcBankCharges = (amtINRUsingTTRate: number): number => {
   return gstOnTaxableValue;
 };
 
-const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
+export const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
   const amtINR = amtUSD * rate;
 
   const totalFee = Number((amtINR * 0.01).toFixed(2));
@@ -29,7 +29,10 @@ const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
   return { receivingAmtINR, totalFee, effectiveRate };
 };
 
-const calcInfinityApp = (amtUSD: number, rate: number): CalculationResult => {
+export const calcInfinityApp = (
+  amtUSD: number,
+  rate: number,
+): CalculationResult => {
   const amtINR = amtUSD * rate;
 
   const totalFee = Number((amtINR * 0.005).toFixed(2));
@@ -39,7 +42,7 @@ const calcInfinityApp = (amtUSD: number, rate: number): CalculationResult => {
   return { receivingAmtINR, totalFee, effectiveRate };
 };
 
-const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
+export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
   const amtINR = amtUSD * rate;
 
   const transactionFee = (() => {
@@ -58,7 +61,7 @@ const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
   return { receivingAmtINR, totalFee, effectiveRate };
 };
 
-const calcIDFC = (
+export const calcIDFC = (
   amtUSD: number,
   rate: number,
   ttBuyRate: number,
@@ -80,7 +83,7 @@ const calcIDFC = (
   return { receivingAmtINR, totalFee, effectiveRate };
 };
 
-const calcIOB = (
+export const calcIOB = (
   amtUSD: number,
   rate: number,
   ttBuyRate: number,
