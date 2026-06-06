@@ -14,7 +14,7 @@ const WorkingField = () => {
         <WorkingCard
           cardNo='02'
           cardShortDesc='We fetch live rates'
-          cardLongDesc='Mid-market rate from XE + scraped bank forex rates, updated every 30 mins.'
+          cardLongDesc='Mid-market rate from Frankfurter + scraped bank forex rates fetched on every call.'
         />
         <WorkingCard
           cardNo='03'
