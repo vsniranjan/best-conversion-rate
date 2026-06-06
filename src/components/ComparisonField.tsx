@@ -9,7 +9,6 @@ type Props = {
 const ComparisonField = async ({ amtUSD }: Props) => {
   const content = await compareAllRates(amtUSD);
 
-  console.log(content);
   return (
     <>
       <p className='text-muted text-sm mt-14 mb-2 pl-2'>Comparison Results</p>
