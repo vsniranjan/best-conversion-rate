@@ -1,4 +1,4 @@
-# Best Conversion Rate
+# Rate Radar
 
 Compare USD to INR conversion rates across multiple platforms and banks in real time. See exactly what you'll receive after all fees, markups, and taxes — so you can pick the option that puts the most rupees in your account.
 
