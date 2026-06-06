@@ -11,7 +11,7 @@ const WorkingCard = ({ cardNo, cardShortDesc, cardLongDesc }: Props) => {
     <Card className='flex-1 bg-[#F0F4FF]'>
       <CardContent className=' space-y-1'>
         <p className='text-6xl'>{cardNo}</p>
-        <p className='text-sm text-primary font-semibold'>{cardShortDesc}</p>
+        <h3 className='text-sm text-primary font-semibold'>{cardShortDesc}</h3>
         <p className='text-xs text-muted'>{cardLongDesc}</p>
       </CardContent>
     </Card>

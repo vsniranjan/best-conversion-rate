@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 type Variant = "best" | "default" | "worst";
@@ -41,7 +41,7 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
       className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
     >
       <CardHeader>
-        <CardTitle className='text-center text-primary'>{data.name}</CardTitle>
+        <h3 className='text-center text-primary text-base font-semibold'>{data.name}</h3>
       </CardHeader>
 
       <Separator className='bg-black mx-6 w-auto!' />

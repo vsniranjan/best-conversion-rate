@@ -3,7 +3,7 @@ import WorkingCard from "./WorkingCard";
 const WorkingField = () => {
   return (
     <>
-      <p className='text-muted text-sm mt-14 mb-4 pl-2'>How it works</p>
+      <h2 className='text-muted text-sm mt-14 mb-4 pl-2'>How it works</h2>
 
       <div className='flex flex-col gap-4 md:flex-row'>
         <WorkingCard
