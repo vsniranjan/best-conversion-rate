@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache";
+
 import { getIDFCRate } from "./rates/idfc";
 import { getMarketRate } from "./rates/market";
 import { fetchIOBRates } from "./rates/iob";
@@ -13,11 +15,9 @@ import {
   calcInfinityApp,
 } from "./calculation";
 
-type Variant = "best" | "default" | "worst";
-
-export async function compareAllRates(amtUSD: number) {
-  const [idfcRate, iobRate, mulyaRate, skydoRate, infinityAppRate, marketRate] =
-    await Promise.all([
+const fetchAllRates = unstable_cache(
+  async () => {
+    return Promise.all([
       getIDFCRate(),
       fetchIOBRates(),
       fetchMulyaRate(),
@@ -25,6 +25,16 @@ export async function compareAllRates(amtUSD: number) {
       fetchInfinityAppRates(),
       getMarketRate(),
     ]);
+  },
+  ["all-forex-rates"],
+  { revalidate: 300 },
+);
+
+type Variant = "best" | "default" | "worst";
+
+export async function compareAllRates(amtUSD: number) {
+  const [idfcRate, iobRate, mulyaRate, skydoRate, infinityAppRate, marketRate] =
+    await fetchAllRates();
 
   const skydo = calcSkydo(amtUSD, skydoRate.fx_rate);
   const mulya = calcMulya(amtUSD, mulyaRate.fx_rate);
