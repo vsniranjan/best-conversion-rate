@@ -2,8 +2,7 @@
 
 This document explains exactly how **Best Conversion Rate** calculates the final INR amount you receive for each platform. All formulas match the logic in [`src/lib/calculation.ts`](./src/lib/calculation.ts).
 
-> [!NOTE]
-> All examples below use **$1,000 USD** with an assumed mid-market rate of **₹95.00 / USD** to illustrate the math. Actual results depend on live rates.
+
 
 ---
 
@@ -61,18 +60,6 @@ Receiving Amount  = Amount INR − Total Fee
 Effective Rate    = Receiving Amount ÷ USD Amount
 ```
 
-#### Worked Example ($1,000 USD)
-
-```
-Amount INR        = 1000 × 95.00          = ₹95,000.00
-Transaction Fee   = 19 × 95.00            = ₹1,805.00   (since $1,000 < $2,000)
-GST on Fee        = 1,805.00 × 0.18       = ₹324.90
-
-Total Fee         = 1,805.00 + 324.90     = ₹2,129.90
-Receiving Amount  = 95,000.00 − 2,129.90  = ₹92,870.10
-Effective Rate    = 92,870.10 ÷ 1,000     = ₹92.8701 / USD
-```
-
 ---
 
 ### Mulya
@@ -88,16 +75,6 @@ Receiving Amount  = Amount INR − Total Fee
 Effective Rate    = Receiving Amount ÷ USD Amount
 ```
 
-#### Worked Example ($1,000 USD)
-
-```
-Amount INR        = 1000 × 95.00          = ₹95,000.00
-Total Fee         = 95,000.00 × 0.01      = ₹950.00
-
-Receiving Amount  = 95,000.00 − 950.00    = ₹94,050.00
-Effective Rate    = 94,050.00 ÷ 1,000     = ₹94.0500 / USD
-```
-
 ---
 
 ### Infinity App
@@ -111,16 +88,6 @@ Amount INR        = USD Amount × Mid-Market Rate
 Total Fee         = Amount INR × 0.005
 Receiving Amount  = Amount INR − Total Fee
 Effective Rate    = Receiving Amount ÷ USD Amount
-```
-
-#### Worked Example ($1,000 USD)
-
-```
-Amount INR        = 1000 × 95.00          = ₹95,000.00
-Total Fee         = 95,000.00 × 0.005     = ₹475.00
-
-Receiving Amount  = 95,000.00 − 475.00    = ₹94,525.00
-Effective Rate    = 94,525.00 ÷ 1,000     = ₹94.5250 / USD
 ```
 
 ---
@@ -164,26 +131,6 @@ Receiving Amount      = Amount INR (Market) − Total Fee
 Effective Rate        = Receiving Amount ÷ USD Amount
 ```
 
-#### Worked Example ($1,000 USD)
-
-Assume Mid-Market Rate = ₹95.00, IDFC TT Buy Rate = ₹94.60
-
-```
-Amount INR (Market)   = 1000 × 95.00             = ₹95,000.00
-Amount INR (TT)       = 1000 × 94.60             = ₹94,600.00
-
-Forex Fee             = 95,000.00 − 94,600.00    = ₹400.00
-
-Bank Charges:
-  Taxable Value       = max(1% × 94,600, 250)
-                      = max(946.00, 250)          = ₹946.00
-  GST on Charges      = 946.00 × 0.18            = ₹170.28
-
-Total Fee             = 400.00 + 170.28           = ₹570.28
-Receiving Amount      = 95,000.00 − 570.28        = ₹94,429.72
-Effective Rate        = 94,429.72 ÷ 1,000         = ₹94.4297 / USD
-```
-
 ---
 
 ### Indian Overseas Bank (IOB)
@@ -199,35 +146,13 @@ Amount INR (TT)       = USD Amount × IOB TT Buy Rate
 Forex Fee             = Amount INR (Market) − Amount INR (TT)
 Bank Charges GST      = calcBankCharges(Amount INR at TT Rate)
 
-IRC Fee               = ₹150
-GST on IRC            = 150 × 0.18 = ₹27
-IRC Total             = ₹177
+IRC Fee               = ₹250
+GST on IRC            = 250 × 0.18 = 45
+IRC Total             = ₹295
 
 Total Fee             = Forex Fee + Bank Charges GST + IRC Total
 Receiving Amount      = Amount INR (Market) − Total Fee
 Effective Rate        = Receiving Amount ÷ USD Amount
-```
-
-#### Worked Example ($1,000 USD)
-
-Assume Mid-Market Rate = ₹95.00, IOB TT Buy Rate = ₹94.40
-
-```
-Amount INR (Market)   = 1000 × 95.00             = ₹95,000.00
-Amount INR (TT)       = 1000 × 94.40             = ₹94,400.00
-
-Forex Fee             = 95,000.00 − 94,400.00    = ₹600.00
-
-Bank Charges:
-  Taxable Value       = max(1% × 94,400, 250)
-                      = max(944.00, 250)          = ₹944.00
-  GST on Charges      = 944.00 × 0.18            = ₹169.92
-
-IRC Total             = 150 + (150 × 0.18)        = ₹177.00
-
-Total Fee             = 600.00 + 169.92 + 177.00  = ₹946.92
-Receiving Amount      = 95,000.00 − 946.92        = ₹94,053.08
-Effective Rate        = 94,053.08 ÷ 1,000         = ₹94.0531 / USD
 ```
 
 ---
