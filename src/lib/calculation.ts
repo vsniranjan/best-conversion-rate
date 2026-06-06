@@ -96,7 +96,7 @@ export const calcIOB = (
 
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
 
-  const IRCFee = 150;
+  const IRCFee = 250;
   const gstOnIRC = IRCFee * 0.18;
   const IRCTotalFee = IRCFee + gstOnIRC;
 
