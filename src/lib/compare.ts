@@ -30,8 +30,6 @@ export async function compareAllRates(amtUSD: number) {
   const mulya = calcMulya(amtUSD, mulyaRate.fx_rate);
   const infinityApp = calcInfinityApp(amtUSD, infinityAppRate.fx_rate);
 
-  // iob and idfc needs the current mid market rate to get effective usd
-  // hence we need to pass a mid market rate, it can rate from skydo/mulya/infinity app
   const iob = calcIOB(amtUSD, marketRate.rate, iobRate);
   const idfc = calcIDFC(amtUSD, marketRate.rate, idfcRate);
 
