@@ -37,44 +37,38 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
   }).format(data.totalFee);
 
   return (
-    <>
-      <Card
-        className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
-      >
-        <CardHeader>
-          <CardTitle className='text-center text-primary'>
-            {data.name}
-          </CardTitle>
-        </CardHeader>
+    <Card
+      className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
+    >
+      <CardHeader>
+        <CardTitle className='text-center text-primary'>{data.name}</CardTitle>
+      </CardHeader>
 
-        <Separator className='bg-black mx-6 w-auto!' />
+      <Separator className='bg-black mx-6 w-auto!' />
 
-        <CardContent className='flex-1 text-center space-y-4'>
-          <section>
-            <p className='text-primary text-[8px] tracking-widest'>
-              YOU RECEIVE
-            </p>
-            <p className={`text-2xl font-semibold ${amtColor[data.type]}`}>
-              {`₹ ${formatedReceivingAmt}`}
-            </p>
-          </section>
+      <CardContent className='flex-1 text-center space-y-4'>
+        <section>
+          <p className='text-primary text-[8px] tracking-widest'>YOU RECEIVE</p>
+          <p className={`text-2xl font-semibold ${amtColor[data.type]}`}>
+            {`₹ ${formatedReceivingAmt}`}
+          </p>
+        </section>
 
-          <section>
-            <p className='text-primary text-[8px] tracking-widest'>CHARGES</p>
-            <p className='text-brand-red text-sm tracking-widest '>{`₹${formatedTotalFee}`}</p>
-          </section>
+        <section>
+          <p className='text-primary text-[8px] tracking-widest'>CHARGES</p>
+          <p className='text-brand-red text-sm tracking-widest '>{`₹${formatedTotalFee}`}</p>
+        </section>
 
-          <section>
-            <p className='text-muted text-[8px] tracking-widest'>
-              EFFECTIVE RATE
-            </p>
-            <p className='text-muted text-[10px] tracking-widest '>
-              {`₹${data.effectiveRate} / USD`}
-            </p>
-          </section>
-        </CardContent>
-      </Card>
-    </>
+        <section>
+          <p className='text-muted text-[8px] tracking-widest'>
+            EFFECTIVE RATE
+          </p>
+          <p className='text-muted text-[10px] tracking-widest '>
+            {`₹${data.effectiveRate} / USD`}
+          </p>
+        </section>
+      </CardContent>
+    </Card>
   );
 };
 
