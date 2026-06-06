@@ -13,7 +13,7 @@ export default async function Home({
   return (
     <>
       <h1 className='text-6xl font-bold text-primary leading-15'>
-        Stop loosing money on
+        Stop losing money on
         <br />
         international transfers.
       </h1>
