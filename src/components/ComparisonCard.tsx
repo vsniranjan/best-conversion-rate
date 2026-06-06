@@ -28,6 +28,13 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
     default: "ring-primary/50",
     worst: "ring-brand-red",
   };
+  const formatedReceivingAmt = new Intl.NumberFormat("en-IN", {
+    maximumFractionDigits: 2,
+  }).format(data.receivingAmtINR);
+
+  const formatedTotalFee = new Intl.NumberFormat("en-IN", {
+    maximumFractionDigits: 2,
+  }).format(data.totalFee);
 
   return (
     <>
@@ -48,13 +55,13 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
               YOU RECEIVE
             </p>
             <p className={`text-2xl font-semibold ${amtColor[data.type]}`}>
-              {`₹ ${data.receivingAmtINR}`}
+              {`₹ ${formatedReceivingAmt}`}
             </p>
           </section>
 
           <section>
             <p className='text-primary text-[8px] tracking-widest'>CHARGES</p>
-            <p className='text-brand-red text-sm tracking-widest '>{`₹${data.totalFee}`}</p>
+            <p className='text-brand-red text-sm tracking-widest '>{`₹${formatedTotalFee}`}</p>
           </section>
 
           <section>
