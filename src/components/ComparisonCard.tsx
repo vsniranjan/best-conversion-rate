@@ -2,13 +2,19 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 type Variant = "best" | "default" | "worst";
-type cardProps = {
-  name: string;
-  receivingAmtINR: number;
-  totalFee: number;
-  effectiveRate: number;
-  type: Variant;
-};
+type cardProps =
+  | {
+      name: string;
+      receivingAmtINR: number;
+      totalFee: number;
+      effectiveRate: number;
+      type: Variant;
+      status: "ok";
+    }
+  | {
+      name: string;
+      status: "error";
+    };
 
 const ComparisonCard = ({ data }: { data: cardProps }) => {
   const bgColor = {
@@ -28,6 +34,22 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
     default: "ring-primary/50",
     worst: "ring-brand-red",
   };
+
+  if (data.status === "error")
+    return (
+      <Card className='w-full sm:flex-1 min-w-0 bg-muted/30 ring-muted'>
+        <CardHeader>
+          <h3 className='text-center text-primary text-base font-semibold'>
+            {data.name}
+          </h3>
+        </CardHeader>
+        <Separator className='bg-black mx-6 w-auto!' />
+        <CardContent className='flex-1 text-center space-y-4 flex flex-col items-center justify-center py-6'>
+          <i className='ti ti-wifi-off text-muted-foreground text-2xl' />
+          <p className='text-muted-foreground text-sm'>Unavailable</p>
+        </CardContent>
+      </Card>
+    );
   const formatedReceivingAmt = new Intl.NumberFormat("en-IN", {
     maximumFractionDigits: 2,
   }).format(data.receivingAmtINR);
@@ -41,7 +63,9 @@ const ComparisonCard = ({ data }: { data: cardProps }) => {
       className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
     >
       <CardHeader>
-        <h3 className='text-center text-primary text-base font-semibold'>{data.name}</h3>
+        <h3 className='text-center text-primary text-base font-semibold'>
+          {data.name}
+        </h3>
       </CardHeader>
 
       <Separator className='bg-black mx-6 w-auto!' />
