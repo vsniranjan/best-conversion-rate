@@ -6,10 +6,18 @@ import WorkingField from "@/components/WorkingField";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ amt: string }>;
+  searchParams: Promise<{ amt?: string }>;
 }) {
   const { amt } = await searchParams;
-  const amtUSD = parseFloat(amt ?? "1000");
+
+  const parsedAmt = Number(amt);
+
+  const amtParam =
+    typeof amt === "string" && Number.isFinite(parsedAmt) && parsedAmt > 0
+      ? amt
+      : "1000";
+
+  const amtUSD = Number(amtParam);
   return (
     <>
       <header>
@@ -24,9 +32,9 @@ export default async function Home({
         </p>
       </header>
 
-      <AmountInput />
+      <AmountInput amtParam={amtParam} />
 
-      <section aria-label="Forex rate comparison results">
+      <section aria-label='Forex rate comparison results'>
         <Suspense
           key={amtUSD}
           fallback={
@@ -39,27 +47,28 @@ export default async function Home({
         </Suspense>
       </section>
 
-      <section aria-label="How Rate Radar works">
+      <section aria-label='How Rate Radar works'>
         <WorkingField />
       </section>
 
-      <footer className="mt-20 border-t border-gray-200/80">
-        <div className="py-8 px-2 text-center space-y-4">
+      <footer className='mt-20 border-t border-gray-200/80'>
+        <div className='py-8 px-2 text-center space-y-4'>
           {/* Brand line */}
-          <p className="text-sm text-primary font-semibold tracking-tight">
+          <p className='text-sm text-primary font-semibold tracking-tight'>
             Rate Radar
           </p>
 
           {/* Tagline */}
-          <p className="text-xs text-muted max-w-md mx-auto leading-relaxed">
+          <p className='text-xs text-muted max-w-md mx-auto leading-relaxed'>
             Free, open-source USD → INR comparison tool.
-            <span className="mx-1.5 text-gray-300">·</span>
-            Compare forex charges across Skydo, Mulya, Infinity App, IDFC First Bank, and IOB
-            — find the best effective rate after all fees, markups, and GST.
+            <span className='mx-1.5 text-gray-300'>·</span>
+            Compare forex charges across Skydo, Mulya, Infinity App, IDFC First
+            Bank, and IOB — find the best effective rate after all fees,
+            markups, and GST.
           </p>
 
           {/* Disclaimer */}
-          <p className="text-[11px] text-gray-400 max-w-sm mx-auto leading-relaxed">
+          <p className='text-[11px] text-gray-400 max-w-sm mx-auto leading-relaxed'>
             Rates are for informational purposes only. Always verify with the
             provider before making financial decisions.
           </p>

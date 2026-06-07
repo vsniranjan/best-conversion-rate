@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/input-group";
 import { useRouter } from "next/navigation";
 
-export function AmountInput() {
+export function AmountInput({ amtParam }: { amtParam: string }) {
   const router = useRouter();
-  const [amount, setAmount] = useState("1000");
+  const [amount, setAmount] = useState(amtParam);
   const [isPending, startTransition] = useTransition();
 
   const handleCompare = () => {
@@ -20,6 +20,10 @@ export function AmountInput() {
       });
     }
   };
+
+  useEffect(() => {
+    setAmount(amtParam);
+  }, [amtParam]);
 
   return (
     <Field className='mt-16'>
