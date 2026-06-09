@@ -13,7 +13,9 @@ const ComparisonField = async ({ amtUSD }: Props) => {
     <>
       <h2 className='text-muted text-sm mt-14 mb-2 pl-2'>Comparison Results</h2>
       <p className='text-xs text-gray-500 pl-2 mb-4'>
-        {`Mid-market rate: ₹${content.marketRate.rate} / USD | Last updated ${content.marketRate.date}`}
+        {content.marketRate
+          ? `Mid-market rate: ₹${content.marketRate.rate} / USD | Last updated ${content.marketRate.date}`
+          : "Could not fetch mid-market rates"}
       </p>
 
       <Accordion type='multiple' className='w-full max-w-2xl gap-4'>
