@@ -1,75 +1,167 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+"use client";
+import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 type Variant = "best" | "default" | "worst";
-type cardProps = {
+
+interface cardProps {
   name: string;
   receivingAmtINR: number;
   totalFee: number;
   effectiveRate: number;
   type: Variant;
-};
+  breakdown: {
+    conversion?: {
+      description: string;
+      amount: number;
+    };
+    platformFee?: {
+      description: string;
+      amount: number;
+    };
+    additionalFees?: Array<{
+      description: string;
+      amount: number;
+    }>;
+  };
+}
 
-const ComparisonCard = ({ data }: { data: cardProps }) => {
-  const bgColor = {
-    best: "bg-brand-green/30",
-    default: "bg-white",
-    worst: "bg-brand-red/15",
+interface ComparisonCardProps {
+  data: cardProps;
+}
+
+export function ComparisonCard({ data }: ComparisonCardProps) {
+  const borderColor = {
+    best: "border-brand-green",
+    worst: "border-brand-red",
+    default: "border-primary/50",
   };
 
-  const amtColor = {
+  const triggerBg = {
+    best: "bg-[rgba(51,229,128,0.3)]",
+    worst: "bg-[rgba(255,89,89,0.3)]",
+    default: "bg-[#f0f4ff]",
+  };
+
+  const recvColor = {
     best: "text-brand-green",
-    default: "text-primary",
     worst: "text-brand-red",
+    default: "text-primary",
   };
-
-  const ringColor = {
-    best: "ring-brand-green",
-    default: "ring-primary/50",
-    worst: "ring-brand-red",
-  };
-  const formatedReceivingAmt = new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 2,
-  }).format(data.receivingAmtINR);
-
-  const formatedTotalFee = new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 2,
-  }).format(data.totalFee);
-
   return (
-    <Card
-      className={`w-full sm:flex-1 min-w-0 ${bgColor[data.type]} ${ringColor[data.type]}`}
+    <AccordionItem
+      value={data.name}
+      className={`border-[1.3px] rounded-xl overflow-hidden ${borderColor[data.type]} ${triggerBg[data.type]}`}
     >
-      <CardHeader>
-        <h3 className='text-center text-primary text-base font-semibold'>{data.name}</h3>
-      </CardHeader>
+      <AccordionTrigger className={`px-5 gap-4 flex`}>
+        <span className='flex-1 text-primary text-xl font-semibold'>
+          {data.name}
+        </span>
 
-      <Separator className='bg-black mx-6 w-auto!' />
+        <span
+          className={`flex-1 text-center text-2xl font-bold ${recvColor[data.type]}`}
+        >
+          ₹
+          {data.receivingAmtINR.toLocaleString("en-IN", {
+            maximumFractionDigits: 0,
+          })}
+        </span>
 
-      <CardContent className='flex-1 text-center space-y-4'>
-        <section>
-          <p className='text-primary text-[8px] tracking-widest'>YOU RECEIVE</p>
-          <p className={`text-2xl font-semibold ${amtColor[data.type]}`}>
-            {`₹ ${formatedReceivingAmt}`}
-          </p>
-        </section>
+        <div className='flex-1 flex flex-col items-end'>
+          <span className='text-brand-red text-lg'>
+            −₹
+            {data.totalFee.toLocaleString("en-IN", {
+              maximumFractionDigits: 0,
+            })}
+          </span>
+          <span className='text-muted text-xs'>
+            ₹
+            {data.effectiveRate.toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+            })}
+            / USD
+          </span>
+        </div>
+      </AccordionTrigger>
 
-        <section>
-          <p className='text-primary text-[8px] tracking-widest'>CHARGES</p>
-          <p className='text-brand-red text-sm tracking-widest '>{`₹${formatedTotalFee}`}</p>
-        </section>
+      <AccordionContent className='px-5 pb-4 bg-white border-t-[1.3px] border-[#001836]'>
+        <div className='text-[11px] font-medium text-[#8c97b8] tracking-widest uppercase mb-3 pt-4'>
+          Fee breakdown
+        </div>
 
-        <section>
-          <p className='text-muted text-[8px] tracking-widest'>
-            EFFECTIVE RATE
-          </p>
-          <p className='text-muted text-[10px] tracking-widest '>
-            {`₹${data.effectiveRate} / USD`}
-          </p>
-        </section>
-      </CardContent>
-    </Card>
+        {data.breakdown.conversion && (
+          <div className='flex justify-between items-center py-2 border-b border-black/10'>
+            <p className='text-[13px] text-[#141f59] m-0!'>
+              {data.breakdown.conversion.description}
+            </p>
+            <span className='text-[14px] font-medium text-[#141f59]'>
+              ₹
+              {data.breakdown.conversion.amount.toLocaleString("en-IN", {
+                maximumFractionDigits: 0,
+              })}
+            </span>
+          </div>
+        )}
+
+        {data.breakdown.platformFee && (
+          <div className='flex justify-between items-center py-2 border-b border-black/10'>
+            <p className='text-[13px] text-[#141f59] m-0!'>
+              {data.breakdown.platformFee.description}
+            </p>
+
+            <span className='text-[14px] font-medium  text-brand-red'>
+              -₹
+              {data.breakdown.platformFee.amount.toLocaleString("en-IN", {
+                maximumFractionDigits: 0,
+              })}
+            </span>
+          </div>
+        )}
+
+        {data.breakdown.additionalFees &&
+          data.breakdown.additionalFees.map((fee, index) => (
+            <div
+              key={index}
+              className='flex justify-between items-center py-2 border-b border-black/10'
+            >
+              <p className='text-[13px] text-[#141f59] m-0!'>
+                {fee.description}
+              </p>
+
+              <span className='text-[14px] font-medium text-brand-red'>
+                -₹
+                {fee.amount.toLocaleString("en-IN", {
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+          ))}
+
+        <div className='flex justify-between items-center pt-3 pb-1'>
+          <span className='text-[14px] font-semibold text-[#141f59]'>
+            You receive
+          </span>
+          <span className='text-[17px] font-bold text-[#141f59]'>
+            ₹
+            {data.receivingAmtINR.toLocaleString("en-IN", {
+              maximumFractionDigits: 0,
+            })}
+          </span>
+        </div>
+        <div className='flex justify-between items-center'>
+          <span className='text-[12px] text-[#8c97b8]'>Effective rate</span>
+          <span className='text-[12px] text-[#8c97b8]'>
+            ₹{data.effectiveRate} / USD
+          </span>
+        </div>
+      </AccordionContent>
+    </AccordionItem>
   );
-};
+}
 
 export default ComparisonCard;

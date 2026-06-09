@@ -2,6 +2,20 @@ type CalculationResult = {
   receivingAmtINR: number;
   totalFee: number;
   effectiveRate: number;
+  breakdown: {
+    conversion?: {
+      description: string;
+      amount: number;
+    };
+    platformFee?: {
+      description: string;
+      amount: number;
+    };
+    additionalFees?: Array<{
+      description: string;
+      amount: number;
+    }>;
+  };
 };
 
 export const calcBankCharges = (amtINRUsingTTRate: number): number => {
@@ -21,12 +35,28 @@ export const calcBankCharges = (amtINRUsingTTRate: number): number => {
 
 export const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
   const amtINR = amtUSD * rate;
-
   const totalFee = Number((amtINR * 0.01).toFixed(2));
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
-
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
-  return { receivingAmtINR, totalFee, effectiveRate };
+
+  const breakdown = {
+    conversion: {
+      description: "Mid-market conversion",
+      amount: amtINR,
+    },
+    platformFee: {
+      description: "1% of gross amount",
+      amount: totalFee,
+    },
+    additionalFees: [],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
 };
 
 export const calcInfinityApp = (
@@ -39,12 +69,29 @@ export const calcInfinityApp = (
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
 
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
-  return { receivingAmtINR, totalFee, effectiveRate };
+
+  const breakdown = {
+    conversion: {
+      description: "Mid-market conversion",
+      amount: amtINR,
+    },
+    platformFee: {
+      description: "0.5% fee",
+      amount: totalFee,
+    },
+    additionalFees: [],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
 };
 
 export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
   const amtINR = amtUSD * rate;
-
   const transactionFee = (() => {
     if (amtUSD < 2000) return 19 * rate;
     if (amtUSD < 10000) return 29 * rate;
@@ -58,7 +105,29 @@ export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
 
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
-  return { receivingAmtINR, totalFee, effectiveRate };
+  const breakdown = {
+    conversion: {
+      description: "Mid-market conversion",
+      amount: amtINR,
+    },
+    platformFee: {
+      description: "Transaction fee",
+      amount: transactionFee,
+    },
+    additionalFees: [
+      {
+        description: "GST on transaction fee",
+        amount: gstOnTransactionFee,
+      },
+    ],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
 };
 
 export const calcIDFC = (
@@ -67,20 +136,36 @@ export const calcIDFC = (
   ttBuyRate: number,
 ): CalculationResult => {
   const amtINR = amtUSD * rate;
-
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
-
   const effectiveForexFee = amtINR - amtINRUsingTTRate;
-
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
-
   const totalFee = Number((effectiveForexFee + gstOnTaxableValue).toFixed(2));
-
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
-
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
-  return { receivingAmtINR, totalFee, effectiveRate };
+  const breakdown = {
+    conversion: {
+      description: "Mid-market conversion",
+      amount: amtINR,
+    },
+    platformFee: {
+      description: "Forex fees",
+      amount: effectiveForexFee,
+    },
+    additionalFees: [
+      {
+        description: "Bank charges",
+        amount: gstOnTaxableValue,
+      },
+    ],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
 };
 
 export const calcIOB = (
@@ -89,24 +174,43 @@ export const calcIOB = (
   ttBuyRate: number,
 ): CalculationResult => {
   const amtINR = amtUSD * rate;
-
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
-
   const effectiveForexFee = amtINR - amtINRUsingTTRate;
-
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
-
   const IRCFee = 250;
   const gstOnIRC = IRCFee * 0.18;
   const IRCTotalFee = IRCFee + gstOnIRC;
-
   const totalFee = Number(
     (effectiveForexFee + gstOnTaxableValue + IRCTotalFee).toFixed(2),
   );
-
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
-
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
-  return { receivingAmtINR, totalFee, effectiveRate };
+  const breakdown = {
+    conversion: {
+      description: "Mid-market conversion",
+      amount: amtINR,
+    },
+    platformFee: {
+      description: "Forex fees",
+      amount: effectiveForexFee,
+    },
+    additionalFees: [
+      {
+        description: "Bank charges",
+        amount: gstOnTaxableValue,
+      },
+      {
+        description: "IRC fee",
+        amount: IRCTotalFee,
+      },
+    ],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
 };
