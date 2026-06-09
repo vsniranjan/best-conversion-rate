@@ -1,5 +1,5 @@
 import ComparisonCard from "./ComparisonCard";
-
+import { Accordion } from "@/components/ui/accordion";
 import { compareAllRates } from "@/lib/compare";
 
 type Props = {
@@ -18,15 +18,11 @@ const ComparisonField = async ({ amtUSD }: Props) => {
           : "Could not fetch mid-market rates"}
       </p>
 
-      <div
-        className='flex flex-wrap gap-4'
-        role='list'
-        aria-label='Platform comparison cards'
-      >
+      <Accordion type='multiple' className='w-full max-w-2xl gap-4'>
         {content.data.map((dataPoint) => (
           <ComparisonCard key={dataPoint.name} data={dataPoint} />
         ))}
-      </div>
+      </Accordion>
     </>
   );
 };
