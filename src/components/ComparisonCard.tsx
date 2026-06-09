@@ -9,7 +9,8 @@ import {
 
 type Variant = "best" | "default" | "worst";
 
-interface cardProps {
+interface CardPropsOk {
+  status: "ok";
   name: string;
   receivingAmtINR: number;
   totalFee: number;
@@ -31,11 +32,41 @@ interface cardProps {
   };
 }
 
+interface CardPropsError {
+  status: "error";
+  name: string;
+}
+
+export type ComparisonCardData = CardPropsOk | CardPropsError;
+
 interface ComparisonCardProps {
-  data: cardProps;
+  data: ComparisonCardData;
 }
 
 export function ComparisonCard({ data }: ComparisonCardProps) {
+  if (data.status === "error") {
+    return (
+      <AccordionItem
+        value={data.name}
+        disabled
+        className="border-[1.3px] rounded-xl overflow-hidden border-brand-red/30 bg-brand-red/5 opacity-70"
+      >
+        <AccordionTrigger className="px-5 gap-4 flex pointer-events-none **:data-[slot=accordion-trigger-icon]:hidden">
+          <span className="flex-1 text-primary text-xl font-semibold">
+            {data.name}
+          </span>
+          <span className="flex-1 text-center text-sm font-medium text-brand-red">
+            Rates temporarily unavailable
+          </span>
+          <div className="flex-1 flex flex-col items-end">
+            <span className="text-muted text-xs">
+              Error
+            </span>
+          </div>
+        </AccordionTrigger>
+      </AccordionItem>
+    );
+  }
   const borderColor = {
     best: "border-brand-green",
     worst: "border-brand-red",
