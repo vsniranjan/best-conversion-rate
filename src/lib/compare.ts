@@ -16,24 +16,24 @@ import {
 } from "./calculation";
 
 const getCachedIDFCRate = unstable_cache(getIDFCRate, ["idfc-rate"], {
-  revalidate: 300,
+  revalidate: 10,
 });
 const getCachedIOBRates = unstable_cache(fetchIOBRates, ["iob-rate"], {
-  revalidate: 300,
+  revalidate: 10,
 });
 const getCachedMulyaRate = unstable_cache(fetchMulyaRate, ["mulya-rate"], {
-  revalidate: 300,
+  revalidate: 10,
 });
 const getCachedSkydoRate = unstable_cache(fetchSkydoRate, ["skydo-rate"], {
-  revalidate: 300,
+  revalidate: 10,
 });
 const getCachedInfinityAppRates = unstable_cache(
   fetchInfinityAppRates,
   ["infinityapp-rate"],
-  { revalidate: 300 },
+  { revalidate: 10 },
 );
 const getCachedMarketRate = unstable_cache(getMarketRate, ["market-rate"], {
-  revalidate: 300,
+  revalidate: 10,
 });
 
 const PROVIDERS = [
