@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { AmountInput } from "@/components/AmountInput";
 import ComparisonField from "@/components/ComparisonField";
 import WorkingField from "@/components/WorkingField";
+import Feedback from "@/components/Feedback";
 
 export default async function Home({
   searchParams,
@@ -52,6 +53,7 @@ export default async function Home({
       </section>
 
       <footer className='mt-20 border-t border-gray-200/80'>
+        <Feedback />
         <div className='py-8 px-2 text-center space-y-4'>
           {/* Brand line */}
           <p className='text-sm text-primary font-semibold tracking-tight'>
