@@ -19,6 +19,8 @@ type CalculationResult = {
   };
 };
 
+const gstRate = 0.18;
+
 export const calcBankCharges = (amtINRUsingTTRate: number): number => {
   const taxableValue = (() => {
     if (amtINRUsingTTRate < 100000) {
@@ -30,7 +32,7 @@ export const calcBankCharges = (amtINRUsingTTRate: number): number => {
     }
   })();
 
-  const gstOnTaxableValue = 0.18 * taxableValue;
+  const gstOnTaxableValue = gstRate * taxableValue;
   return gstOnTaxableValue;
 };
 
@@ -99,7 +101,7 @@ export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
     return 0.003 * amtINR;
   })();
 
-  const gstOnTransactionFee = transactionFee * 0.18;
+  const gstOnTransactionFee = transactionFee * gstRate;
 
   const totalFee = Number((transactionFee + gstOnTransactionFee).toFixed(2));
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
@@ -208,7 +210,7 @@ export const calcIOB = (
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
   const IRCFee = 250;
-  const gstOnIRC = IRCFee * 0.18;
+  const gstOnIRC = IRCFee * gstRate;
   const IRCTotalFee = IRCFee + gstOnIRC;
   const totalFee = Number((gstOnTaxableValue + IRCTotalFee).toFixed(2));
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
