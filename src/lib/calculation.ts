@@ -6,6 +6,7 @@ type CalculationResult = {
     conversion?: {
       description: string;
       amount: number;
+      ttBuyRate?: number;
     };
     platformFee?: {
       description: string;
@@ -137,20 +138,16 @@ export const calcIDFC = (
 ): CalculationResult => {
   const amtINR = amtUSD * rate;
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
-  const effectiveForexFee = amtINR - amtINRUsingTTRate;
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
-  const totalFee = Number((effectiveForexFee + gstOnTaxableValue).toFixed(2));
+  const totalFee = Number(gstOnTaxableValue.toFixed(2));
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
   const breakdown = {
     conversion: {
-      description: "Mid-market conversion",
-      amount: amtINR,
-    },
-    platformFee: {
-      description: "Forex fees",
-      amount: effectiveForexFee,
+      description: "Amount using TT Buy Rate",
+      amount: amtINRUsingTTRate,
+      ttBuyRate,
     },
     additionalFees: [
       {
@@ -175,33 +172,28 @@ export const calcIOB = (
 ): CalculationResult => {
   const amtINR = amtUSD * rate;
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
-  const effectiveForexFee = amtINR - amtINRUsingTTRate;
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
   const IRCFee = 250;
   const gstOnIRC = IRCFee * 0.18;
   const IRCTotalFee = IRCFee + gstOnIRC;
-  const totalFee = Number(
-    (effectiveForexFee + gstOnTaxableValue + IRCTotalFee).toFixed(2),
-  );
+  const totalFee = Number((gstOnTaxableValue + IRCTotalFee).toFixed(2));
   const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
   const breakdown = {
     conversion: {
-      description: "Mid-market conversion",
-      amount: amtINR,
+      description: "Amount using TT Buy Rate",
+      amount: amtINRUsingTTRate,
+      ttBuyRate,
     },
-    platformFee: {
-      description: "Forex fees",
-      amount: effectiveForexFee,
-    },
+
     additionalFees: [
       {
         description: "Bank charges",
         amount: gstOnTaxableValue,
       },
       {
-        description: "IRC fee",
+        description: "IRC fee + 18% GST",
         amount: IRCTotalFee,
       },
     ],

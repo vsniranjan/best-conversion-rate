@@ -20,6 +20,7 @@ interface CardPropsOk {
     conversion?: {
       description: string;
       amount: number;
+      ttBuyRate?: number;
     };
     platformFee?: {
       description: string;
@@ -49,19 +50,17 @@ export function ComparisonCard({ data }: ComparisonCardProps) {
       <AccordionItem
         value={data.name}
         disabled
-        className="border-[1.3px] rounded-xl overflow-hidden border-brand-red/30 bg-brand-red/5 opacity-70"
+        className='border-[1.3px] rounded-xl overflow-hidden border-brand-red/30 bg-brand-red/5 opacity-70'
       >
-        <AccordionTrigger className="px-5 gap-4 flex pointer-events-none **:data-[slot=accordion-trigger-icon]:hidden">
-          <span className="flex-1 text-primary text-xl font-semibold">
+        <AccordionTrigger className='px-5 gap-4 flex pointer-events-none **:data-[slot=accordion-trigger-icon]:hidden'>
+          <span className='flex-1 text-primary text-xl font-semibold'>
             {data.name}
           </span>
-          <span className="flex-1 text-center text-sm font-medium text-brand-red">
+          <span className='flex-1 text-center text-sm font-medium text-brand-red'>
             Rates temporarily unavailable
           </span>
-          <div className="flex-1 flex flex-col items-end">
-            <span className="text-muted text-xs">
-              Error
-            </span>
+          <div className='flex-1 flex flex-col items-end'>
+            <span className='text-muted text-xs'>Error</span>
           </div>
         </AccordionTrigger>
       </AccordionItem>
@@ -127,9 +126,15 @@ export function ComparisonCard({ data }: ComparisonCardProps) {
 
         {data.breakdown.conversion && (
           <div className='flex justify-between items-center py-2 border-b border-black/10'>
-            <p className='text-[13px] text-[#141f59] m-0!'>
-              {data.breakdown.conversion.description}
-            </p>
+            <div>
+              <p className='text-[13px] text-[#141f59] m-0!'>
+                {data.breakdown.conversion.description}
+              </p>
+              <p className='text-[12px] text-muted mt-0.5'>
+                {data.breakdown.conversion.ttBuyRate &&
+                  `Rate: ₹${data.breakdown.conversion.ttBuyRate} / USD`}
+              </p>
+            </div>
             <span className='text-[14px] font-medium text-[#141f59]'>
               ₹
               {data.breakdown.conversion.amount.toLocaleString("en-IN", {
