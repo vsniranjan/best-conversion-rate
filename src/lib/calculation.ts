@@ -26,7 +26,7 @@ export const calcBankCharges = (amtINRUsingTTRate: number): number => {
     } else if (amtINRUsingTTRate < 1000000) {
       return 1000 + 0.005 * (amtINRUsingTTRate - 100000);
     } else {
-      return 5500 + 0.001 * (amtINRUsingTTRate - 1000000);
+      return Math.min(5500 + 0.001 * (amtINRUsingTTRate - 1000000), 60000);
     }
   })();
 
@@ -132,6 +132,40 @@ export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
 };
 
 export const calcIDFC = (
+  amtUSD: number,
+  rate: number,
+  ttBuyRate: number,
+): CalculationResult => {
+  const amtINR = amtUSD * rate;
+  const amtINRUsingTTRate = amtUSD * ttBuyRate;
+  const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
+  const totalFee = Number(gstOnTaxableValue.toFixed(2));
+  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
+
+  const breakdown = {
+    conversion: {
+      description: "Amount using TT Buy Rate",
+      amount: amtINRUsingTTRate,
+      ttBuyRate,
+    },
+    additionalFees: [
+      {
+        description: "Bank charges",
+        amount: gstOnTaxableValue,
+      },
+    ],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
+};
+
+export const calcICICI = (
   amtUSD: number,
   rate: number,
   ttBuyRate: number,

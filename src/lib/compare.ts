@@ -6,6 +6,7 @@ import { fetchIOBRates } from "./rates/iob";
 import { fetchMulyaRate } from "./rates/mulya";
 import { fetchSkydoRate } from "./rates/skydo";
 import { fetchInfinityAppRates } from "./rates/infinityApp";
+import { fetchICICIRates } from "./rates/icici";
 
 import {
   calcIDFC,
@@ -13,6 +14,7 @@ import {
   calcSkydo,
   calcMulya,
   calcInfinityApp,
+  calcICICI,
 } from "./calculation";
 
 const getCachedIDFCRate = unstable_cache(getIDFCRate, ["idfc-rate"], {
@@ -27,6 +29,11 @@ const getCachedMulyaRate = unstable_cache(fetchMulyaRate, ["mulya-rate"], {
 const getCachedSkydoRate = unstable_cache(fetchSkydoRate, ["skydo-rate"], {
   revalidate: 10,
 });
+
+const getCachedICICIRate = unstable_cache(fetchICICIRates, ["icici-rate"], {
+  revalidate: 10,
+});
+
 const getCachedInfinityAppRates = unstable_cache(
   fetchInfinityAppRates,
   ["infinityapp-rate"],
@@ -43,6 +50,7 @@ const PROVIDERS = [
   { name: "Mulya", fetch: getCachedMulyaRate },
   { name: "Infinity App", fetch: getCachedInfinityAppRates },
   { name: "Market", fetch: getCachedMarketRate },
+  { name: "ICICI", fetch: getCachedICICIRate },
 ];
 
 const fetchAllRates = () =>
@@ -53,6 +61,7 @@ const fetchAllRates = () =>
     getCachedMulyaRate(),
     getCachedInfinityAppRates(),
     getCachedMarketRate(),
+    getCachedICICIRate(),
   ]);
 
 export async function compareAllRates(amtUSD: number) {
@@ -63,7 +72,7 @@ export async function compareAllRates(amtUSD: number) {
     if (r.status === "rejected") console.error(PROVIDERS[i].name, r.reason);
   });
 
-  const [idfc, iob, skydo, mulya, infinityApp, market] = results;
+  const [idfc, iob, skydo, mulya, infinityApp, market, icici] = results;
 
   const idfcRate = idfc.status === "fulfilled" ? idfc.value : null;
   const iobRate = iob.status === "fulfilled" ? iob.value : null;
@@ -72,6 +81,7 @@ export async function compareAllRates(amtUSD: number) {
   const infinityAppDetails =
     infinityApp.status === "fulfilled" ? infinityApp.value : null;
   const marketDetails = market.status === "fulfilled" ? market.value : null;
+  const iciciRate = icici.status === "fulfilled" ? icici.value : null;
 
   const rawData = [
     idfcRate && marketDetails
@@ -88,6 +98,14 @@ export async function compareAllRates(amtUSD: number) {
           status: "ok" as const,
         }
       : { name: "IOB", status: "error" as const },
+
+    iciciRate && marketDetails
+      ? {
+          ...calcICICI(amtUSD, marketDetails.rate, iciciRate),
+          name: "ICICI",
+          status: "ok" as const,
+        }
+      : { name: "ICICI", status: "error" as const },
     mulyaDetails
       ? {
           ...calcMulya(amtUSD, mulyaDetails.fx_rate),
