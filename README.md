@@ -10,16 +10,6 @@ If you receive USD payments in India (as a freelancer, consultant, or business),
 
 This tool does the math for you. Enter a USD amount and instantly see a side-by-side breakdown of your final INR amount across all supported platforms, ranked from best to worst.
 
-## Supported Platforms
-
-| Platform | Type |
-|---|---|
-| Skydo | Fintech |
-| Mulya | Fintech |
-| Infinity App | Fintech |
-| IDFC First Bank | Bank |
-| Indian Overseas Bank (IOB) | Bank |
-
 ## Features
 
 - **Live rates** — Exchange rates are fetched in real time from each platform
