@@ -153,7 +153,7 @@ export const calcIDFC = (
     },
     additionalFees: [
       {
-        description: "Bank charges",
+        description: "GST on Currency Conversion",
         amount: gstOnTaxableValue,
       },
     ],
@@ -187,7 +187,7 @@ export const calcICICI = (
     },
     additionalFees: [
       {
-        description: "Bank charges",
+        description: "GST on Currency Conversion",
         amount: gstOnTaxableValue,
       },
     ],
@@ -225,12 +225,54 @@ export const calcIOB = (
 
     additionalFees: [
       {
-        description: "Bank charges",
+        description: "GST on Currency Conversion",
         amount: gstOnTaxableValue,
       },
       {
         description: "IRC fee + 18% GST",
         amount: IRCTotalFee,
+      },
+    ],
+  };
+
+  return {
+    receivingAmtINR,
+    totalFee,
+    effectiveRate,
+    breakdown,
+  };
+};
+
+export const calcAxis = (
+  amtUSD: number,
+  rate: number,
+  ttBuyRate: number,
+): CalculationResult => {
+  const amtINR = amtUSD * rate;
+  const amtINRUsingTTRate = amtUSD * ttBuyRate;
+  const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
+  const SWIFTFee = 250;
+  const gstOnSWIFT = SWIFTFee * gstRate;
+  const SWIFTTotalFee = SWIFTFee + gstOnSWIFT;
+  const totalFee = Number((gstOnTaxableValue + SWIFTTotalFee).toFixed(2));
+  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
+
+  const breakdown = {
+    conversion: {
+      description: "Amount using TT Buy Rate",
+      amount: amtINRUsingTTRate,
+      ttBuyRate,
+    },
+
+    additionalFees: [
+      {
+        description: "GST on Currency Conversion",
+        amount: gstOnTaxableValue,
+      },
+      {
+        description: "SWIFT fee + 18% GST",
+        amount: SWIFTTotalFee,
       },
     ],
   };
