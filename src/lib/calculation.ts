@@ -2,6 +2,7 @@ type CalculationResult = {
   receivingAmtINR: number;
   totalFee: number;
   effectiveRate: number;
+  feesExceedAmount?: boolean;
   breakdown: {
     conversion?: {
       description: string;
@@ -40,7 +41,10 @@ export const calcBankCharges = (amtINRUsingTTRate: number): number => {
 export const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
   const amtINR = amtUSD * rate;
   const totalFee = Number((amtINR * 0.01).toFixed(2));
-  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const rawReceivingAmt = amtINR - totalFee;
+  const receivingAmtINR = Number(
+    Math.max(0, rawReceivingAmt).toFixed(2),
+  );
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
   const breakdown = {
@@ -59,6 +63,7 @@ export const calcMulya = (amtUSD: number, rate: number): CalculationResult => {
     receivingAmtINR,
     totalFee,
     effectiveRate,
+    feesExceedAmount: rawReceivingAmt < 0,
     breakdown,
   };
 };
@@ -70,7 +75,10 @@ export const calcInfinityApp = (
   const amtINR = amtUSD * rate;
 
   const totalFee = Number((amtINR * 0.005).toFixed(2));
-  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const rawReceivingAmt = amtINR - totalFee;
+  const receivingAmtINR = Number(
+    Math.max(0, rawReceivingAmt).toFixed(2),
+  );
 
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
@@ -90,6 +98,7 @@ export const calcInfinityApp = (
     receivingAmtINR,
     totalFee,
     effectiveRate,
+    feesExceedAmount: rawReceivingAmt < 0,
     breakdown,
   };
 };
@@ -105,7 +114,10 @@ export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
   const gstOnTransactionFee = transactionFee * gstRate;
 
   const totalFee = Number((transactionFee + gstOnTransactionFee).toFixed(2));
-  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const rawReceivingAmt = amtINR - totalFee;
+  const receivingAmtINR = Number(
+    Math.max(0, rawReceivingAmt).toFixed(2),
+  );
 
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
@@ -130,6 +142,7 @@ export const calcSkydo = (amtUSD: number, rate: number): CalculationResult => {
     receivingAmtINR,
     totalFee,
     effectiveRate,
+    feesExceedAmount: rawReceivingAmt < 0,
     breakdown,
   };
 };
@@ -143,7 +156,10 @@ export const calcIDFC = (
   const amtINRUsingTTRate = amtUSD * ttBuyRate;
   const gstOnTaxableValue = calcBankCharges(amtINRUsingTTRate);
   const totalFee = Number(gstOnTaxableValue.toFixed(2));
-  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const rawReceivingAmt = amtINR - totalFee;
+  const receivingAmtINR = Number(
+    Math.max(0, rawReceivingAmt).toFixed(2),
+  );
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
   const breakdown = {
@@ -164,6 +180,7 @@ export const calcIDFC = (
     receivingAmtINR,
     totalFee,
     effectiveRate,
+    feesExceedAmount: rawReceivingAmt < 0,
     breakdown,
   };
 };
@@ -183,7 +200,10 @@ export const calcIOB = (
   const totalFee = Number(
     (gstOnTaxableValue + IRCTotalFee + toptalWireFee).toFixed(2),
   );
-  const receivingAmtINR = Number((amtINR - totalFee).toFixed(2));
+  const rawReceivingAmt = amtINR - totalFee;
+  const receivingAmtINR = Number(
+    Math.max(0, rawReceivingAmt).toFixed(2),
+  );
   const effectiveRate = Number((receivingAmtINR / amtUSD).toFixed(4));
 
   const breakdown = {
@@ -210,6 +230,7 @@ export const calcIOB = (
     receivingAmtINR,
     totalFee,
     effectiveRate,
+    feesExceedAmount: rawReceivingAmt < 0,
     breakdown,
   };
 };

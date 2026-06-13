@@ -15,6 +15,7 @@ interface CardPropsOk {
   receivingAmtINR: number;
   totalFee: number;
   effectiveRate: number;
+  feesExceedAmount?: boolean;
   type: Variant;
   breakdown: {
     conversion?: {
@@ -93,14 +94,20 @@ export function ComparisonCard({ data }: ComparisonCardProps) {
           {data.name}
         </span>
 
-        <span
-          className={`flex-1 text-center text-2xl font-bold ${recvColor[data.type]}`}
-        >
-          ₹
-          {data.receivingAmtINR.toLocaleString("en-IN", {
-            maximumFractionDigits: 0,
-          })}
-        </span>
+        {data.feesExceedAmount ? (
+          <span className='flex-1 text-center text-lg font-bold text-brand-red'>
+            Fees exceed amount
+          </span>
+        ) : (
+          <span
+            className={`flex-1 text-center text-2xl font-bold ${recvColor[data.type]}`}
+          >
+            ₹
+            {data.receivingAmtINR.toLocaleString("en-IN", {
+              maximumFractionDigits: 0,
+            })}
+          </span>
+        )}
 
         <div className='flex-1 flex flex-col items-end'>
           <span className='text-brand-red text-lg'>
